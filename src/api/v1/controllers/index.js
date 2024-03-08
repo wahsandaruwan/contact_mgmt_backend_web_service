@@ -1,7 +1,7 @@
 // -----------------------Imports-----------------------
-const { ConnectDatabase } = require("./ConnectDatabase");
+const { RegisterNewUser } = require("./User");
 
 // -----------------------Exports-----------------------
 module.exports = {
-  ConnectDatabase,
+  RegisterNewUser,
 };

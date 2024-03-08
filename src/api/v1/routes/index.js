@@ -1,7 +1,7 @@
 // -----------------------Imports-----------------------
-const { ConnectDatabase } = require("./ConnectDatabase");
+const UserRoutes = require("./User");
 
 // -----------------------Exports-----------------------
 module.exports = {
-  ConnectDatabase,
+  UserRoutes,
 };
