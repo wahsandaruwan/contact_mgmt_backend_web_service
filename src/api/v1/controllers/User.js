@@ -76,4 +76,87 @@ const RegisterNewUser = async (req, res) => {
   }
 };
 
-module.exports = { RegisterNewUser };
+// -----------------------Function to login user-----------------------
+const LoginUser = async (req, res) => {
+  // Request body
+  const { emailAddress, password } = req.body;
+
+  try {
+    // Check if email address already available
+    const User = await UserModel.findOne({ emailAddress }).exec();
+    if (!User) {
+      return res.status(401).json({
+        status: false,
+        error: { message: "Wrong email address!" },
+      });
+    }
+
+    // Check if password matches
+    const PassMatch = await bcrypt.compare(password, User.password);
+    if (!PassMatch) {
+      return res.status(401).json({
+        status: false,
+        error: { message: "Wrong password!" },
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      success: { message: "Successfully logged in the user!" },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: false,
+      error: { message: "Failed to login the user due to server error!" },
+    });
+  }
+};
+
+// -----------------------Function to get all users-----------------------
+const GetAllUsers = async (req, res) => {
+  try {
+    const Users = await UserModel.find().exec();
+    return res.status(200).json({
+      status: true,
+      users: Users,
+      success: { message: "Successfully fetched all users!" },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: false,
+      error: { message: "Failed to fetch all users due to server error!" },
+    });
+  }
+};
+
+// -----------------------Function to get user by id-----------------------
+const GetUserById = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    // Check user already available
+    const User = await UserModel.findOne({ _id: userId }).exec();
+    if (!User) {
+      return res.status(404).json({
+        status: false,
+        success: { message: "No user available for the provided user id!" },
+      });
+    }
+
+    return res.status(200).json({
+      status: true,
+      user: User,
+      success: { message: "Successfully fetched the user!" },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: false,
+      success: { message: "Failed to fetch the user due to server error!" },
+    });
+  }
+};
+
+module.exports = { RegisterNewUser, LoginUser, GetAllUsers, GetUserById };
