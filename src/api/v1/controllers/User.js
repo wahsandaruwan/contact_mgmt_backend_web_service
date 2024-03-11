@@ -185,8 +185,27 @@ const UpdateUserById = async (req, res) => {
       });
     }
 
-    // Property validation
+    // Properties validation
+    if (!dateUpdated || !timeUpdated) {
+      return res.status(400).json({
+        status: false,
+        error: {
+          message: "Not provided updated date or time information!",
+        },
+      });
+    }
     if (currentPassword && newPassword) {
+      // Check if the obejct has correct properties count
+      const PropertiesCount = Object.keys(req.body).length;
+      if (PropertiesCount != 4) {
+        return res.status(400).json({
+          status: false,
+          error: {
+            message: "Invalid number of properties for the password update!",
+          },
+        });
+      }
+
       // Check if current password matches
       const PassMatch = await bcrypt.compare(currentPassword, User.password);
 
