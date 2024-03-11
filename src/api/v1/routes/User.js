@@ -7,6 +7,7 @@ const {
   LoginUser,
   GetAllUsers,
   GetUserById,
+  UpdateUserById,
 } = require("../controllers");
 const { AuthenticateUser } = require("../middleware");
 
@@ -25,5 +26,8 @@ router.get("/all", AuthenticateUser, GetAllUsers);
 
 // Get user by id
 router.get("/one/:userId", AuthenticateUser, GetUserById);
+
+// Update user by id
+router.put("/update/:userId", AuthenticateUser, UpdateUserById);
 
 module.exports = router;

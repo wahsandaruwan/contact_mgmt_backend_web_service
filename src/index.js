@@ -34,5 +34,5 @@ app.listen(PORT, () => {
   console.log(`Server is running at ${PORT}`);
   ConnectDatabase()
     .then(() => console.log("Connected to Database!"))
-    .catch((err) => onslotchange.log(err));
+    .catch((err) => console.log(err));
 });

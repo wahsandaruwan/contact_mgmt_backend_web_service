@@ -164,4 +164,94 @@ const GetUserById = async (req, res) => {
   }
 };
 
-module.exports = { RegisterNewUser, LoginUser, GetAllUsers, GetUserById };
+// -----------------------Function to update user by id-----------------------
+const UpdateUserById = async (req, res) => {
+  // Request params
+  const { userId } = req.params;
+
+  // Request body
+  const { newPassword, currentPassword, dateUpdated, timeUpdated } = req.body;
+
+  // Global variables
+  let UpdatedUser, EncryptedPassword;
+
+  try {
+    // Check user already available
+    const User = await UserModel.findOne({ _id: userId }).exec();
+    if (!User) {
+      return res.status(404).json({
+        status: false,
+        success: { message: "No user available for the provided user id!" },
+      });
+    }
+
+    // Property validation
+    if (currentPassword && newPassword) {
+      // Check if current password matches
+      const PassMatch = await bcrypt.compare(currentPassword, User.password);
+
+      if (!PassMatch) {
+        return res.status(400).json({
+          status: false,
+          error: { message: "Wrong current password!" },
+        });
+      }
+
+      // Encrypt password
+      EncryptedPassword = await bcrypt.hash(newPassword, 8);
+    } else if (!currentPassword && newPassword) {
+      return res.status(400).json({
+        status: false,
+        success: { message: "Not provided the current password!" },
+      });
+    } else if (!newPassword && currentPassword) {
+      return res.status(400).json({
+        status: false,
+        success: { message: "Not provided the new password!" },
+      });
+    }
+
+    // Update user
+    UpdatedUser = await UserModel.findOneAndUpdate(
+      { _id: userId },
+      {
+        $set:
+          currentPassword && newPassword
+            ? {
+                password: EncryptedPassword,
+                dateUpdated,
+                timeUpdated,
+              }
+            : req.body,
+      },
+      {
+        new: true,
+      }
+    );
+
+    return res.status(200).json({
+      status: true,
+      user: UpdatedUser,
+      success: {
+        message:
+          currentPassword && newPassword
+            ? "Successfully updated the password of the user!"
+            : "Successfully updated the basic information of the user!",
+      },
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({
+      status: false,
+      success: { message: "Failed to update the user due to server error!" },
+    });
+  }
+};
+
+module.exports = {
+  RegisterNewUser,
+  LoginUser,
+  GetAllUsers,
+  GetUserById,
+  UpdateUserById,
+};

@@ -12,7 +12,7 @@ const GenerateTokens = (user) => {
 
     // Generate the access token
     const AccessToken = jwt.sign(Payload, Configs.JWT_ACCESS_KEY, {
-      expiresIn: "1m",
+      expiresIn: "1h",
     });
 
     return { status: true, accessToken: AccessToken };
