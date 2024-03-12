@@ -181,7 +181,7 @@ const UpdateUserById = async (req, res) => {
     if (!User) {
       return res.status(404).json({
         status: false,
-        success: { message: "No user available for the provided user id!" },
+        error: { message: "No user available for the provided user id!" },
       });
     }
 
@@ -221,12 +221,12 @@ const UpdateUserById = async (req, res) => {
     } else if (!currentPassword && newPassword) {
       return res.status(400).json({
         status: false,
-        success: { message: "Not provided the current password!" },
+        error: { message: "Not provided the current password!" },
       });
     } else if (!newPassword && currentPassword) {
       return res.status(400).json({
         status: false,
-        success: { message: "Not provided the new password!" },
+        error: { message: "Not provided the new password!" },
       });
     }
 
