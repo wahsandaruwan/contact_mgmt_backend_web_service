@@ -11,10 +11,10 @@ const {
 } = require("../controllers");
 const { AuthenticateUser } = require("../middleware");
 
-// -----------Initialize the router-----------
+// -----------------------Initialize the router-----------------------
 const router = express.Router();
 
-// -----------Routes-----------
+// -----------------------Routes-----------------------
 // Register a new user
 router.post("/register", RegisterNewUser);
 

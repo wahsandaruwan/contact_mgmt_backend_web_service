@@ -6,6 +6,7 @@ const {
   GetUserById,
   UpdateUserById,
 } = require("./User");
+const { SaveFile, DeleteFile } = require("./File");
 
 // -----------------------Exports-----------------------
 module.exports = {
@@ -14,4 +15,6 @@ module.exports = {
   GetAllUsers,
   GetUserById,
   UpdateUserById,
+  SaveFile,
+  DeleteFile,
 };
