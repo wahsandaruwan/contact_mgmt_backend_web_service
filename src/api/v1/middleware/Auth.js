@@ -46,4 +46,30 @@ const AuthenticateUser = (req, res, next) => {
   }
 };
 
-module.exports = { AuthenticateUser };
+// -----------------------Function to authorize the user-----------------------
+const AuthorizeUser = (roles) => {
+  return (req, res, next) => {
+    const UserRole = req.user.userType;
+    try {
+      if (roles.includes(UserRole)) {
+        return next();
+      }
+      return res.status(401).json({
+        status: false,
+        error: {
+          message: "Permission denied to access use this feature!",
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({
+        status: false,
+        error: {
+          message: "Failed to authorize the user due to server error!",
+        },
+      });
+    }
+  };
+};
+
+module.exports = { AuthenticateUser, AuthorizeUser };

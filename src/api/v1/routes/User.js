@@ -9,7 +9,7 @@ const {
   GetUserById,
   UpdateUserById,
 } = require("../controllers");
-const { AuthenticateUser } = require("../middleware");
+const { AuthenticateUser, AuthorizeUser } = require("../middleware");
 
 // -----------------------Initialize the router-----------------------
 const router = express.Router();
@@ -22,7 +22,7 @@ router.post("/register", RegisterNewUser);
 router.post("/login", LoginUser);
 
 // Get all users
-router.get("/all", AuthenticateUser, GetAllUsers);
+router.get("/all", AuthenticateUser, AuthorizeUser(["Admin"]), GetAllUsers);
 
 // Get user by id
 router.get("/one/:userId", AuthenticateUser, GetUserById);
